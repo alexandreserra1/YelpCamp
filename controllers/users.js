@@ -32,7 +32,12 @@ module.exports.login = (req, res) => {
 }
 
 module.exports.logout = (req, res) => {
-    req.logout();
-    req.flash('success', "Goodbye!");
-    res.redirect('/campgrounds');
+    req.logout((err) => {
+        if (err) {
+            req.flash('error', err.message);
+            return res.redirect('/campgrounds');
+        }
+        req.flash('success', "Goodbye!");
+        res.redirect('/campgrounds');
+    });
 }
