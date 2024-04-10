@@ -7,7 +7,7 @@
             <div class="carousel-inner">
                 <% campground.images.forEach((img, i) => {  %>
                 <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
-                    <img src="<%= img.url%>" class="d-block w-100" alt="">
+                    <img crossorigin="anonymous" src="<%= img.url %>" class="d-block w-100" alt="">
                 </div>
                 <% }) %>
                 
@@ -52,6 +52,8 @@
         </div>
     </div>
     <div class="col-6">
+        <div id='map'></div>
+
         <% if(currentUser){ %>
             <h2>Leave a Review</h2>
             <form action="/campgrounds/<%= campground._id %>/reviews" method="POST" class="mb-3 validated-form" novalidate>
@@ -101,3 +103,10 @@
         <% } %>
     </div>
 </div>
+
+<script>
+    const mapToken = '<%- process.env.MAPBOX_TOKEN %>';
+    const campground = <%- JSON.stringify(campground) %>;
+</script>
+
+<script src="/javascripts/showPageMap.js"></script>

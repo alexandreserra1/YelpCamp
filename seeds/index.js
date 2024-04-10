@@ -12,36 +12,43 @@ const db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-    console.log("Database connected");
+  console.log("Database connected");
 });
 
 const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
-    await Campground.deleteMany({});
-    for (let i = 0; i < 50; i++) {
-        const random1000 = Math.floor(Math.random() * 1000);
-        const price = Math.floor(Math.random() * 20) + 19;
-        const camp = new Campground({
-            location: `${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(places)}`,
-            description: 'This is the best place you ve ever been! It has everything you need to make you connect with nature',
-            price,
-            images: [
-                {
-                  url: 'https://res.cloudinary.com/dboznbktl/image/upload/v1712095307/YelpCamp/mj60wlt2nysk0qfg3jj6.jpg',
-                  filename: 'YelpCamp/mj60wlt2nysk0qfg3jj6',
-                },
-                {
-                  url: 'https://res.cloudinary.com/dboznbktl/image/upload/v1712095305/YelpCamp/e6kbffxxnnsgpuo47j5v.jpg',
-                  filename: 'YelpCamp/e6kbffxxnnsgpuo47j5v',
-                }
-              ],
-        });
-        await camp.save();
-    }
+  await Campground.deleteMany({});
+  for (let i = 0; i < 200; i++) {
+    const random1000 = Math.floor(Math.random() * 1000);
+    const price = Math.floor(Math.random() * 20) + 19;
+    const camp = new Campground({
+      location: `${cities[random1000].city}, ${cities[random1000].state}`,
+      title: `${sample(descriptors)} ${sample(places)}`,
+      description: 'This is the best place you ve ever been! It has everything you need to make you connect with nature',
+      price,
+      geometry: {
+        type: "Point",
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ]
+      },
+      images: [
+        {
+          url: 'https://res.cloudinary.com/dboznbktl/image/upload/v1712063965/samples/landscapes/nature-mountains.jpg',
+          filename: 'YelpCamp/hidbt3veojxwkemicwo8',
+        },
+        {
+          url: 'https://res.cloudinary.com/dboznbktl/image/upload/v1712273327/YelpCamp/nae646jz3ui5t91cif6x.jpg',
+          filename: 'YelpCamp/nae646jz3ui5t91cif6x',
+        }
+      ],
+    });
+    await camp.save();
+  }
 }
 
 seedDB().then(() => {
-    mongoose.connection.close();
+  mongoose.connection.close();
 });
